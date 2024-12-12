@@ -11,15 +11,22 @@ const GlobalStyles = styled.createGlobalStyle`
         font-style: normal;
     }
 
+    @font-face {
+        font-family: 'Inter-SemiBold';
+        src: url('src/assets/fonts/Inter-SemiBold.otf');
+        font-weight: 400;
+        font-style: normal;
+    }
+
     body {
         margin: 0;
         padding: 0;
-        font-family: 'Inter';
     }
 
     #app {
         max-width: 600px;
         margin: 0 auto;
+        font-family: 'Inter';
     }
 `
 

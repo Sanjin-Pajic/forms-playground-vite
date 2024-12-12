@@ -13,7 +13,7 @@ export default defineConfig({
                 icon: true
             },
             // Also include only the dedicated icons directory for obvious performance reasons.
-            include: 'src/assets/icons/*.svg'
+            include: 'src/assets/icons/*.svg?react'
         })
     ]
 })

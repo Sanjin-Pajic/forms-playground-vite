@@ -1,5 +1,5 @@
-import { HomeWrapper } from './Home.styles'
-import MyIcon from '../../assets/icons/info.svg'
+import { HeaderText, HeaderWrapper, HomeWrapper, IconInfoWrapper } from './Home.styles'
+import IconInfo from '../../assets/icons/info.svg?react'
 
 /**
  * HOME COMPONENT
@@ -9,10 +9,8 @@ import MyIcon from '../../assets/icons/info.svg'
  * The App.tsx file is designed to include only this component as its main content.
  * While the original design does not involve routing or multiple pages, this setup
  * separates the primary UI logic from the App.tsx file, adhering to cleaner architectural
- * principles (in my opinion). By doing this, we ensure that the main application component,
- * where optimally only routing logic and global components should be held, is not cluttered
- * with direct TSX content and that future scalability is preserved if additional routes or
- * components are to be added later (if this was an actual production-based project).
+ * principles (in my opinion). Makes things tidier, and future scalability is preserved if
+ * additional routes or page components were to be added later.
  *
  * @function Home
  * @returns {JSX.Element}
@@ -20,8 +18,12 @@ import MyIcon from '../../assets/icons/info.svg'
 function Home(): JSX.Element {
     return (
         <HomeWrapper>
-            <MyIcon />
-            <p>Locations</p>
+            <HeaderWrapper>
+                <HeaderText>Locations</HeaderText>
+                <IconInfoWrapper>
+                    <IconInfo fill="#464549" stroke="#464549" />
+                </IconInfoWrapper>
+            </HeaderWrapper>
         </HomeWrapper>
     )
 }

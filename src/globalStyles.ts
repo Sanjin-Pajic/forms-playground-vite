@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components'
+import deviceQuery from './utils/deviceQuery'
 
 // small hack to make Prettier work here.
 const styled = { createGlobalStyle }
@@ -24,9 +25,13 @@ const GlobalStyles = styled.createGlobalStyle`
     }
 
     #app {
-        max-width: 600px;
-        margin: 0 auto;
+        padding: 0.8rem 0.5rem;
         font-family: 'Inter';
+
+        ${deviceQuery.mobileL} {
+            max-width: 600px;
+            margin: 0 auto;
+        }
     }
 `
 

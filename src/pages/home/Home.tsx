@@ -1,4 +1,4 @@
-import { HeaderText, HeaderWrapper, HomeWrapper, IconInfoWrapper } from './Home.styles'
+import { HeaderText, HomeWrapper, IconInfoWrapper, LocationsHeaderWrapper } from './Home.styles'
 import IconInfo from '../../assets/icons/info.svg?react'
 
 /**
@@ -18,12 +18,12 @@ import IconInfo from '../../assets/icons/info.svg?react'
 function Home(): JSX.Element {
     return (
         <HomeWrapper>
-            <HeaderWrapper>
+            <LocationsHeaderWrapper>
                 <HeaderText>Locations</HeaderText>
                 <IconInfoWrapper>
                     <IconInfo fill="#464549" stroke="#464549" />
                 </IconInfoWrapper>
-            </HeaderWrapper>
+            </LocationsHeaderWrapper>
         </HomeWrapper>
     )
 }

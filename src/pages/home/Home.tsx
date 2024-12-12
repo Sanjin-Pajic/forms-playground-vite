@@ -1,3 +1,6 @@
+import { HomeWrapper } from './Home.styles'
+import MyIcon from '../../assets/icons/info.svg'
+
 /**
  * HOME COMPONENT
  *
@@ -16,10 +19,10 @@
  */
 function Home(): JSX.Element {
     return (
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <HomeWrapper>
+            <MyIcon />
             <p>Locations</p>
-            <p>Locations</p>
-        </div>
+        </HomeWrapper>
     )
 }
 

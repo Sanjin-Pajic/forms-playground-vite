@@ -1,7 +1,6 @@
 import { createGlobalStyle } from 'styled-components'
 import deviceQuery from './utils/deviceQuery'
 
-// small hack to make Prettier work here.
 const styled = { createGlobalStyle }
 
 const GlobalStyles = styled.createGlobalStyle`

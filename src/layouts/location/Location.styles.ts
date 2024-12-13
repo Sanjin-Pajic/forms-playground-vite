@@ -19,6 +19,7 @@ export const CopyButtonWrapper = styled.div`
 `
 
 export const TextLabel = styled.label`
+    width: 100%;
     padding: 1.5rem 0 0.3rem;
     font-family: 'Inter-SemiBold';
     color: #464549;
@@ -26,7 +27,7 @@ export const TextLabel = styled.label`
 `
 
 export const TextInput = styled.input<{ maxWidth?: string }>`
-    width: ${(p) => p.maxWidth ?? '100%'};
+    width: 100%;
     font-size: 13.5px;
     padding: 6px 4px;
     border-radius: 4px;

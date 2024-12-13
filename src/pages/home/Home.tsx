@@ -1,4 +1,5 @@
 import {
+    Divider,
     HeaderText,
     HomeWrapper,
     IconInfoWrapper,
@@ -10,57 +11,50 @@ import IconInfo from '../../assets/icons/info.svg?react'
 import Location from '../../layouts/location/Location'
 import Button from '../../components/common/button/ReusableButton'
 import IconPlus from '../../assets/icons/plus.svg?react'
+import { useState } from 'react'
+import { EndActionButtonContainer } from '../../layouts/location/Location.styles'
+import ReusableButton from '../../components/common/button/ReusableButton'
 
-/**
- * HOME COMPONENT
- *
- * This component serves as the primary entry point for the application (excluding index.tsx or App.tsx).
- *
- * The App.tsx file is designed to include only this component as its main content.
- * While the original design does not involve routing or multiple pages, this setup
- * separates the primary UI logic from the App.tsx file, adhering to cleaner architectural
- * principles (in my opinion). Makes things tidier, and future scalability is preserved if
- * additional routes or page components were to be added later.
- *
- * @function     Home
- * @returns {JSX.Element}
- */
+export type FormFieldValues = {
+    venueTitle: string
+    altName?: string
+    address: string
+    city: string
+    country?: string
+    state: string
+    postal: string
+    parkingInfo: string
+}
+
 function Home(): JSX.Element {
-    const locations: LocationProps[] = [
-        {
-            title: '',
-            altName: '',
-            address: '',
-            city: '',
-            country: '',
-            state: '',
-            postalCode: '',
-            parkingFee: false,
-            parkingInfo: ''
-        },
-        {
-            title: '',
-            altName: '',
-            address: '',
-            city: '',
-            country: '',
-            state: '',
-            postalCode: '',
-            parkingFee: false,
-            parkingInfo: ''
-        },
-        {
-            title: '',
-            altName: '',
-            address: '',
-            city: '',
-            country: '',
-            state: '',
-            postalCode: '',
-            parkingFee: false,
-            parkingInfo: ''
-        }
-    ]
+    const [locations, setLocations] = useState<FormFieldValues[]>([])
+
+    // Add a new empty form
+    const addNewLocation = () => {
+        setLocations((prev) => [
+            ...prev,
+            {
+                venueTitle: '',
+                altName: '',
+                address: '',
+                city: '',
+                country: '',
+                state: '',
+                postal: '',
+                parkingInfo: ''
+            }
+        ])
+    }
+
+    // Copy an existing form
+    const copyLocation = (index: number) => {
+        setLocations((prev) => {
+            const locationToCopy = { ...prev[index] }
+            const newLocations = [...prev]
+            newLocations.splice(index + 1, 0, locationToCopy)
+            return newLocations
+        })
+    }
 
     return (
         <HomeWrapper>
@@ -72,27 +66,23 @@ function Home(): JSX.Element {
                     </IconInfoWrapper>
                 </LocationsHeaderLabelWrapper>
 
-                <Button icon={<IconPlus fill="#464549" stroke="#464549" />}>Add New Location</Button>
+                <Button onClick={addNewLocation} icon={<IconPlus fill="#464549" stroke="#464549" />}>
+                    Add New Location
+                </Button>
             </TopHeaderSection>
             <LocationsContainer>
-                {locations.map(() => (
-                    <Location />
+                {locations.map((location, index) => (
+                    <Location key={index} {...location} />
                 ))}
             </LocationsContainer>
+            <EndActionButtonContainer>
+                <ReusableButton>Cancel</ReusableButton>
+                <ReusableButton backgroundColor="purple" color="white" type="submit">
+                    Save
+                </ReusableButton>
+            </EndActionButtonContainer>
         </HomeWrapper>
     )
-}
-
-interface LocationProps {
-    title?: string
-    altName?: string
-    address?: string
-    city?: string
-    country?: string
-    state?: string
-    postalCode?: string
-    parkingFee?: boolean
-    parkingInfo: string
 }
 
 export default Home

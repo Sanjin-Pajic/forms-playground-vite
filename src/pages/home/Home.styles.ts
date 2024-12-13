@@ -29,10 +29,20 @@ export const IconInfoWrapper = styled.div`
     cursor: pointer;
 `
 
-export const LocationsContainer = styled.div``
+export const LocationsContainer = styled.div`
+    width: 100%;
+`
 export const TopHeaderSection = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding-bottom: 1.5rem;
+`
+
+export const Divider = styled.div<{ customMargin?: string }>`
+    height: 1px;
+    background-color: black;
+    width: 100%;
+    opacity: 10%;
+    margin-top: ${(p) => p.customMargin ?? '20px'};
 `

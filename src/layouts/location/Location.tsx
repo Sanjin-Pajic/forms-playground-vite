@@ -4,7 +4,6 @@ import IconCopy from '../../assets/icons/copy.svg?react'
 import { FormFieldValues } from '../../pages/home/Home'
 import ReusableButton from '../../components/common/button/ReusableButton'
 import Select, { StylesConfig } from 'react-select'
-import { useEffect } from 'react'
 
 interface Option {
     value: string
@@ -23,6 +22,23 @@ interface LocationProps {
     copyLocation: (newLocation: FormFieldValues) => void
 }
 
+const countryOptions = [
+    {
+        value: '1',
+        label: 'United States'
+    },
+    {
+        value: '2',
+        label: 'Bosnia & Herzegovina'
+    }
+]
+
+const stateOptions = [
+    { value: 'AL', label: 'Alabama' },
+    { value: 'AK', label: 'Alaska' },
+    { value: 'AZ', label: 'Arizona' }
+]
+
 function Location(props: LocationProps) {
     const { register, control, getValues } = useForm<FormFieldValues>({
         defaultValues: {
@@ -30,18 +46,12 @@ function Location(props: LocationProps) {
             altName: props.altName ?? '',
             address: props.address ?? '',
             city: props.city ?? '',
-            country: props.country ?? '',
-            state: props.state ?? '',
+            country: props.country ?? countryOptions[0].value,
+            state: props.state ?? stateOptions[0].value,
             postal: props.postal ?? '',
             parkingInfo: props.parkingInfo ?? ''
         }
     })
-
-    const stateOptions = [
-        { value: 'AL', label: 'Alabama' },
-        { value: 'AK', label: 'Alaska' },
-        { value: 'AZ', label: 'Arizona' }
-    ]
 
     const customStyles: StylesConfig<Option, false> = {
         control: (provided) => ({
@@ -60,17 +70,6 @@ function Location(props: LocationProps) {
             height: '33px'
         })
     }
-
-    const countryOptions = [
-        {
-            value: '1',
-            label: 'United States'
-        },
-        {
-            value: '2',
-            label: 'Bosnia & Herzegovina'
-        }
-    ]
 
     const handleCopyLocation = () => {
         const formValues = getValues()
@@ -114,12 +113,13 @@ function Location(props: LocationProps) {
                         <Controller
                             control={control}
                             name="country"
-                            defaultValue={countryOptions?.[0].value}
                             render={({ field }) => (
                                 <Select
+                                    {...field}
                                     options={countryOptions}
                                     styles={customStyles}
-                                    onChange={(selectedOption) => field.onChange(selectedOption)}
+                                    value={countryOptions.find((option) => option.value === field.value)} // Bind selected value
+                                    onChange={(selectedOption) => field.onChange(selectedOption?.value)} // Update with value only
                                 />
                             )}
                         />
@@ -132,12 +132,13 @@ function Location(props: LocationProps) {
                             <Controller
                                 control={control}
                                 name="state"
-                                defaultValue={stateOptions?.[0].value}
                                 render={({ field }) => (
                                     <Select
+                                        {...field}
                                         options={stateOptions}
                                         styles={customStyles}
-                                        onChange={(selectedOption) => field.onChange(selectedOption)}
+                                        value={stateOptions.find((option) => option.value === field.value)} // Bind selected value
+                                        onChange={(selectedOption) => field.onChange(selectedOption?.value)} // Update with value only
                                     />
                                 )}
                             />

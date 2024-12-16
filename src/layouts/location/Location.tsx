@@ -1,5 +1,5 @@
 import { Controller, useForm } from 'react-hook-form'
-import { LocationWrapper, LocationMain, CopyButtonWrapper, TextLabel, TextInput } from './Location.styles'
+import { LocationWrapper, LocationMain, CopyButtonWrapper, TextLabel, TextInput, TextArea } from './Location.styles'
 import IconCopy from '../../assets/icons/copy.svg?react'
 import { FormFieldValues } from '../../pages/home/Home'
 import ReusableButton from '../../components/common/button/ReusableButton'
@@ -177,7 +177,7 @@ function Location(props: FormFieldValues) {
                     </div>
 
                     <TextLabel>Parking Info</TextLabel>
-                    <TextInput type="textarea"></TextInput>
+                    <TextArea rows={5} {...register('parkingInfo')} />
                 </form>
             </LocationMain>
         </LocationWrapper>

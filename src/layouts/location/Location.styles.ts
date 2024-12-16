@@ -26,6 +26,15 @@ export const TextLabel = styled.label`
     font-size: 13.5px;
 `
 
+export const TextArea = styled.textarea`
+    width: 100%;
+    font-size: 13.5px;
+    padding: 6px 4px;
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    resize: vertical;
+`
+
 export const TextInput = styled.input<{ maxWidth?: string }>`
     width: 100%;
     font-size: 13.5px;

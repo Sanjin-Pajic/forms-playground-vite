@@ -29,7 +29,6 @@ export type FormFieldValues = {
 function Home(): JSX.Element {
     const [locations, setLocations] = useState<FormFieldValues[]>([])
 
-    // Add a new empty form
     const addNewLocation = () => {
         setLocations((prev) => [
             ...prev,
@@ -46,14 +45,8 @@ function Home(): JSX.Element {
         ])
     }
 
-    // Copy an existing form
-    const copyLocation = (index: number) => {
-        setLocations((prev) => {
-            const locationToCopy = { ...prev[index] }
-            const newLocations = [...prev]
-            newLocations.splice(index + 1, 0, locationToCopy)
-            return newLocations
-        })
+    const copyLocation = (newLocation: FormFieldValues) => {
+        setLocations((prev) => [...prev, newLocation])
     }
 
     return (
@@ -72,7 +65,7 @@ function Home(): JSX.Element {
             </TopHeaderSection>
             <LocationsContainer>
                 {locations.map((location, index) => (
-                    <Location key={index} {...location} />
+                    <Location key={index} {...location} copyLocation={copyLocation} />
                 ))}
             </LocationsContainer>
             <EndActionButtonContainer>

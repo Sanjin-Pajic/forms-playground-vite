@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 interface ButtonWrapperProps {
-    backgroundColor?: string
+    $backgroundColor?: string
 }
 
 export const ButtonWrapper = styled.div<ButtonWrapperProps>`
@@ -11,16 +11,16 @@ export const ButtonWrapper = styled.div<ButtonWrapperProps>`
     height: fit-content;
     display: flex;
     align-items: center;
-    background-color: ${(p) => p.backgroundColor ?? 'transparent'};
+    background-color: ${(p) => p.$backgroundColor ?? 'transparent'};
 `
 
-export const Button = styled.button<{ color?: string; customPadding?: string }>`
+export const Button = styled.button<{ $color?: string; $customPadding?: string }>`
     display: flex;
     align-items: center;
     gap: 0.3rem;
     font-size: 12px;
-    color: ${(p) => p.color ?? '#56555a'};
-    padding: ${(p) => p.customPadding ?? '6px 21px'};
+    color: ${(p) => p.$color ?? '#56555a'};
+    padding: ${(p) => p.$customPadding ?? '6px 21px'};
     font-family: 'Inter-SemiBold';
     font-weight: 1000;
     background-color: transparent;

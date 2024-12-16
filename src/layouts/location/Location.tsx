@@ -1,4 +1,4 @@
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { LocationWrapper, LocationMain, CopyButtonWrapper, TextLabel, TextInput } from './Location.styles'
 import IconCopy from '../../assets/icons/copy.svg?react'
 import { FormFieldValues } from '../../pages/home/Home'
@@ -6,7 +6,7 @@ import ReusableButton from '../../components/common/button/ReusableButton'
 import Select, { StylesConfig } from 'react-select'
 
 function Location(props: FormFieldValues) {
-    const { register } = useForm<FormFieldValues>({
+    const { register, control } = useForm<FormFieldValues>({
         defaultValues: {
             venueTitle: props.venueTitle || '',
             altName: props.altName || '',
@@ -97,11 +97,11 @@ function Location(props: FormFieldValues) {
 
     const countryOptions = [
         {
-            value: 'US',
+            value: '1',
             label: 'United States'
         },
         {
-            value: 'B&H',
+            value: '2',
             label: 'Bosnia & Herzegovina'
         }
     ]
@@ -139,14 +139,36 @@ function Location(props: FormFieldValues) {
                     </div>
                     <div style={{ width: '100%', paddingTop: '20px' }}>
                         <TextLabel>Country</TextLabel>
-                        <Select options={countryOptions} styles={customStyles} />
+                        <Controller
+                            control={control}
+                            name="country"
+                            defaultValue={countryOptions?.[0].value} // Pass the full object, not just `value`
+                            render={({ field }) => (
+                                <Select
+                                    options={countryOptions}
+                                    styles={customStyles}
+                                    onChange={(selectedOption) => field.onChange(selectedOption)} // Map onChange to field.onChange
+                                />
+                            )}
+                        />
                     </div>
                     <div
                         style={{ display: 'flex', justifyContent: 'space-between', width: '100%', paddingTop: '20px' }}
                     >
                         <div style={{ width: '60%' }}>
                             <TextLabel>State</TextLabel>
-                            <Select options={stateOptions} styles={customStyles} />
+                            <Controller
+                                control={control}
+                                name="state"
+                                defaultValue={stateOptions?.[0].value}
+                                render={({ field }) => (
+                                    <Select
+                                        options={stateOptions}
+                                        styles={customStyles}
+                                        onChange={(selectedOption) => field.onChange(selectedOption)}
+                                    />
+                                )}
+                            />
                         </div>
                         <div style={{ width: '30%', marginRight: '10px' }}>
                             <TextLabel>Zip/Postal</TextLabel>

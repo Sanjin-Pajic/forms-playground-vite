@@ -32,6 +32,7 @@ export const TextArea = styled.textarea`
     padding: 6px 4px;
     border-radius: 4px;
     border: 1px solid rgba(0, 0, 0, 0.1);
+    font-family: 'Inter';
     resize: vertical;
 `
 
@@ -48,4 +49,43 @@ export const EndActionButtonContainer = styled.div`
     justify-content: flex-end;
     gap: 1rem;
     margin-top: 2rem;
+`
+export const LocationForm = styled.form`
+    display: flex;
+    flex-wrap: wrap;
+`
+
+export const HalvedInputsContainer = styled.div`
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding-top: 20px;
+
+    & :last-child {
+        margin-right: 10px;
+    }
+`
+
+export const HalvedInputWrapper = styled.div`
+    width: 47%;
+`
+
+export const CountryDropdownInputWrapper = styled.div`
+    width: 100%;
+    padding-top: 20px;
+`
+
+export const CustomWidthInputsContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding-top: 20px;
+`
+export const StateDropdownInputWrapper = styled.div`
+    width: 65%;
+`
+
+export const ZipInputWrapper = styled.div`
+    width: 30%;
+    margin-right: 10px;
 `

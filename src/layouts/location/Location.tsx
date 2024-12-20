@@ -1,14 +1,27 @@
 import { Controller, useForm } from 'react-hook-form'
-import { LocationWrapper, LocationMain, CopyButtonWrapper, TextLabel, TextInput, TextArea } from './Location.styles'
+import {
+    LocationWrapper,
+    LocationMain,
+    CopyButtonWrapper,
+    TextLabel,
+    TextInput,
+    TextArea,
+    LocationForm,
+    HalvedInputsContainer,
+    HalvedInputWrapper,
+    CountryDropdownInputWrapper,
+    CustomWidthInputsContainer,
+    StateDropdownInputWrapper,
+    ZipInputWrapper
+} from './Location.styles'
 import IconCopy from '../../assets/icons/copy.svg?react'
-import { FormFieldValues } from '../../pages/home/Home'
+import { LocationFormFieldValues } from '../../pages/home/Home'
 import ReusableButton from '../../components/common/button/ReusableButton'
-import Select, { StylesConfig } from 'react-select'
-
-interface Option {
-    value: string
-    label: string
-}
+import Select from 'react-select'
+import { RefObject, useImperativeHandle } from 'react'
+import CountryOptions from '../../constants/COUNTRY_OPTIONS.json'
+import StateOptions from '../../constants/STATE_OPTIONS.json'
+import { DropdownStyling, LocationFormFieldDefaults } from './helpers'
 
 interface LocationProps {
     venueTitle?: string
@@ -19,96 +32,78 @@ interface LocationProps {
     state?: string
     postal?: string
     parkingInfo?: string
-    copyLocation: (newLocation: FormFieldValues) => void
+    addNewLocationForm: (newLocationForm: LocationFormFieldValues) => void
+    ref: RefObject<any>
 }
 
-const countryOptions = [
-    {
-        value: '1',
-        label: 'United States'
-    },
-    {
-        value: '2',
-        label: 'Bosnia & Herzegovina'
-    }
-]
-
-const stateOptions = [
-    { value: 'AL', label: 'Alabama' },
-    { value: 'AK', label: 'Alaska' },
-    { value: 'AZ', label: 'Arizona' }
-]
-
 function Location(props: LocationProps) {
-    const { register, control, getValues } = useForm<FormFieldValues>({
+    const { venueTitle, altName, address, city, country, state, postal, parkingInfo, addNewLocationForm, ref } = props
+
+    const {
+        register,
+        control,
+        trigger,
+        getValues,
+        formState: { errors }
+    } = useForm<LocationFormFieldValues>({
         defaultValues: {
-            venueTitle: props.venueTitle ?? '',
-            altName: props.altName ?? '',
-            address: props.address ?? '',
-            city: props.city ?? '',
-            country: props.country ?? countryOptions[0].value,
-            state: props.state ?? stateOptions[0].value,
-            postal: props.postal ?? '',
-            parkingInfo: props.parkingInfo ?? ''
+            venueTitle: venueTitle || LocationFormFieldDefaults.venueTitle,
+            altName: altName || LocationFormFieldDefaults.altName,
+            address: address || LocationFormFieldDefaults.address,
+            city: city || LocationFormFieldDefaults.city,
+            country: country || LocationFormFieldDefaults.country,
+            state: state || LocationFormFieldDefaults.state,
+            postal: postal || LocationFormFieldDefaults.postal,
+            parkingInfo: parkingInfo || LocationFormFieldDefaults.parkingInfo
         }
     })
 
-    const customStyles: StylesConfig<Option, false> = {
-        control: (provided) => ({
-            ...provided,
-            height: '33px',
-            minHeight: '30px'
-        }),
-        valueContainer: (provided) => ({
-            ...provided,
-            height: '33px',
-            display: 'flex',
-            alignItems: 'center'
-        }),
-        indicatorsContainer: (provided) => ({
-            ...provided,
-            height: '33px'
-        })
-    }
-
-    const handleCopyLocation = () => {
-        const formValues = getValues()
-        console.log('Form values ', formValues)
-        props.copyLocation(formValues)
-    }
+    // Without this, we would not be able to access each Location's
+    // unique trigger() function from the parent Home component
+    useImperativeHandle(ref, () => ({
+        trigger,
+        getValues
+    }))
 
     return (
-        <LocationWrapper>
+        <LocationWrapper ref={ref}>
             <LocationMain>
                 <CopyButtonWrapper>
-                    <ReusableButton icon={<IconCopy />} customPadding="6.5px" onClick={() => handleCopyLocation()}>
+                    <ReusableButton
+                        icon={<IconCopy />}
+                        customPadding="6.5px"
+                        onClick={() => addNewLocationForm(getValues())}
+                    >
                         Copy
                     </ReusableButton>
                 </CopyButtonWrapper>
-                <form style={{ display: 'flex', flexWrap: 'wrap' }}>
+                <LocationForm>
                     <TextLabel>Venue Title</TextLabel>
-                    <TextInput type="text" id="venueTitle" {...register('venueTitle')}></TextInput>
+                    <TextInput
+                        type="text"
+                        id="venueTitle"
+                        {...register('venueTitle', { required: 'Venue Title is required.', minLength: 1 })}
+                    ></TextInput>
+                    {errors.venueTitle && errors.venueTitle.type === 'required' && (
+                        <span role="alert">This is required</span>
+                    )}
 
                     <TextLabel>Alt Name</TextLabel>
                     <TextInput type="text" id="altName" {...register('altName')}></TextInput>
-                    <div
-                        style={{
-                            display: 'flex',
-                            width: '100%',
-                            paddingTop: '20px',
-                            justifyContent: 'space-between'
-                        }}
-                    >
-                        <div style={{ width: '47%' }}>
+                    <HalvedInputsContainer>
+                        <HalvedInputWrapper>
                             <TextLabel>Address</TextLabel>
                             <TextInput type="text" id="address" {...register('address')}></TextInput>
-                        </div>
-                        <div style={{ width: '47%', marginRight: '10px' }}>
+                        </HalvedInputWrapper>
+                        <HalvedInputWrapper>
                             <TextLabel>City</TextLabel>
                             <TextInput type="text" id="city" {...register('city')}></TextInput>
-                        </div>
-                    </div>
-                    <div style={{ width: '100%', paddingTop: '20px' }}>
+                        </HalvedInputWrapper>
+                    </HalvedInputsContainer>
+                    <CountryDropdownInputWrapper>
+                        {
+                            // TODO: COME BACK HERE LATER, CAN BE OPTIMIZED.
+                        }
                         <TextLabel>Country</TextLabel>
                         <Controller
                             control={control}
@@ -116,18 +111,16 @@ function Location(props: LocationProps) {
                             render={({ field }) => (
                                 <Select
                                     {...field}
-                                    options={countryOptions}
-                                    styles={customStyles}
-                                    value={countryOptions.find((option) => option.value === field.value)} // Bind selected value
-                                    onChange={(selectedOption) => field.onChange(selectedOption?.value)} // Update with value only
+                                    options={CountryOptions}
+                                    styles={DropdownStyling}
+                                    value={CountryOptions.find((option) => option.value === field.value)}
+                                    onChange={(selectedOption) => field.onChange(selectedOption?.value)}
                                 />
                             )}
                         />
-                    </div>
-                    <div
-                        style={{ display: 'flex', justifyContent: 'space-between', width: '100%', paddingTop: '20px' }}
-                    >
-                        <div style={{ width: '60%' }}>
+                    </CountryDropdownInputWrapper>
+                    <CustomWidthInputsContainer>
+                        <StateDropdownInputWrapper>
                             <TextLabel>State</TextLabel>
                             <Controller
                                 control={control}
@@ -135,23 +128,23 @@ function Location(props: LocationProps) {
                                 render={({ field }) => (
                                     <Select
                                         {...field}
-                                        options={stateOptions}
-                                        styles={customStyles}
-                                        value={stateOptions.find((option) => option.value === field.value)} // Bind selected value
-                                        onChange={(selectedOption) => field.onChange(selectedOption?.value)} // Update with value only
+                                        options={StateOptions}
+                                        styles={DropdownStyling}
+                                        value={StateOptions.find((option) => option.value === field.value)}
+                                        onChange={(selectedOption) => field.onChange(selectedOption?.value)}
                                     />
                                 )}
                             />
-                        </div>
-                        <div style={{ width: '30%', marginRight: '10px' }}>
+                        </StateDropdownInputWrapper>
+                        <ZipInputWrapper>
                             <TextLabel>Zip/Postal</TextLabel>
                             <TextInput type="text" id="postal" {...register('postal')}></TextInput>
-                        </div>
-                    </div>
+                        </ZipInputWrapper>
+                    </CustomWidthInputsContainer>
 
                     <TextLabel>Parking Info</TextLabel>
                     <TextArea rows={5} {...register('parkingInfo')} />
-                </form>
+                </LocationForm>
             </LocationMain>
         </LocationWrapper>
     )

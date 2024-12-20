@@ -1,6 +1,6 @@
 import { UseFormRegister } from 'react-hook-form'
 import { Description, InputLabel, ReusableInputWrapper, TrueInput } from './TextInput.styles'
-import { FormFieldValues } from '../../../pages/home/Home'
+import { LocationFormFieldValues } from '../../../pages/home/Home'
 
 interface TextInputProps {
     id: 'venueTitle' | 'altName' | 'address' | 'city' | 'country' | 'state' | 'postal' | 'parkingInfo'
@@ -8,16 +8,15 @@ interface TextInputProps {
     type: 'text' | 'textarea'
     description?: string
     maxWidth?: string
-    register: UseFormRegister<FormFieldValues>
+    register: UseFormRegister<LocationFormFieldValues>
 }
 
 export default function TextInput(props: TextInputProps) {
-    const { id, label, type, description, maxWidth, register } = { ...props }
-    const finalInput = type === 'text' ? <TrueInput {...register(id)} id={id} type="texts" /> : <textarea rows={6} />
+    const { id, label, type, description, register } = { ...props }
     return (
         <ReusableInputWrapper>
             <InputLabel htmlFor={id}>{label}</InputLabel>
-            {finalInput}
+            <TrueInput {...register(id)} id={id} type="texts" />
             {props.description && <Description>{description}</Description>}
         </ReusableInputWrapper>
     )

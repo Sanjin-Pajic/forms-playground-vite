@@ -8,15 +8,18 @@ interface ReusableButtonProps {
     color?: string
     type?: 'submit'
     customPadding?: string
+    disabled?: boolean
     onClick?: (() => void) | undefined
 }
 
 function ReusableButton(props: ReusableButtonProps) {
+    const { children, icon, backgroundColor, color, type, customPadding, disabled, onClick } = props
+
     return (
-        <ButtonWrapper $backgroundColor={props.backgroundColor} color={props.color} onClick={props.onClick}>
-            <RealButton $color={props.color} type={props.type} $customPadding={props.customPadding}>
-                {props.icon ?? null}
-                {props.children ?? null}
+        <ButtonWrapper $backgroundColor={backgroundColor} color={color} $disabled={disabled} onClick={onClick}>
+            <RealButton $color={color} type={type} $customPadding={customPadding} disabled={disabled}>
+                {icon ?? null}
+                {children ?? null}
             </RealButton>
         </ButtonWrapper>
     )

@@ -2,6 +2,7 @@ import styled from 'styled-components'
 
 interface ButtonWrapperProps {
     $backgroundColor?: string
+    $disabled?: boolean
 }
 
 export const ButtonWrapper = styled.div<ButtonWrapperProps>`
@@ -12,6 +13,8 @@ export const ButtonWrapper = styled.div<ButtonWrapperProps>`
     display: flex;
     align-items: center;
     background-color: ${(p) => p.$backgroundColor ?? 'transparent'};
+
+    opacity: ${(p) => (p.$disabled ? '60%' : '100%')};
 `
 
 export const Button = styled.button<{ $color?: string; $customPadding?: string }>`
@@ -27,4 +30,9 @@ export const Button = styled.button<{ $color?: string; $customPadding?: string }
     border: 0px solid transparent;
     border-radius: none;
     cursor: pointer;
+
+    &:disabled {
+        cursor: unset;
+        opacity: 60%;
+    }
 `

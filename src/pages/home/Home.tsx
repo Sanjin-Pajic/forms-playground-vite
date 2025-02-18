@@ -43,7 +43,7 @@ function Home(): JSX.Element {
                     </IconInfoWrapper>
                 </LocationsHeaderLabelWrapper>
 
-                <Button icon={<IconPlus fill="#464549" stroke="#464549" />} onClick={addNewLocationForm}>
+                <Button icon={<IconPlus fill="#464549" stroke="#464549" />} onClick={insertForm}>
                     Add New Location
                 </Button>
             </TopHeaderSection>
@@ -53,13 +53,21 @@ function Home(): JSX.Element {
                         {...location.values}
                         key={location.id}
                         ref={locationFormRefs.current[location.id]}
-                        addNewLocationForm={addNewLocationForm}
+                        addNewLocationForm={insertForm}
                     />
                 ))}
             </LocationsContainer>
             <EndActionButtonContainer>
-                <ReusableButton>Cancel</ReusableButton>
-                <ReusableButton backgroundColor="purple" color="white" type="submit" onClick={submitAllForms}>
+                <ReusableButton disabled={locationForms.length === 0} onClick={clearForms}>
+                    Cancel
+                </ReusableButton>
+                <ReusableButton
+                    backgroundColor="purple"
+                    color="white"
+                    type="submit"
+                    disabled={locationForms.length === 0}
+                    onClick={submitAllForms}
+                >
                     Save
                 </ReusableButton>
             </EndActionButtonContainer>
@@ -68,10 +76,16 @@ function Home(): JSX.Element {
 
     // ===============
 
-    function addNewLocationForm(values?: LocationFormFieldValues) {
+    function insertForm(values?: LocationFormFieldValues) {
         const id = crypto.randomUUID()
-        setLocationForms((prev) => [...prev, { id, values: values ? { ...values } : { ...LocationFormFieldDefaults } }])
+        const valuesFinal = values ? { ...values } : { ...LocationFormFieldDefaults }
+
+        setLocationForms((prev) => [...prev, { id, values: valuesFinal }])
         locationFormRefs.current[id] = createRef()
+    }
+
+    function clearForms() {
+        setLocationForms([])
     }
 
     async function submitAllForms() {
@@ -82,9 +96,7 @@ function Home(): JSX.Element {
             const formRef = locationFormRefs.current[id]?.current
             if (formRef) {
                 const isValid = await formRef.trigger()
-                if (isValid) {
-                    allData.push(formRef.getValues())
-                } else {
+                if (!isValid) {
                     allValid = false
                     break
                 }

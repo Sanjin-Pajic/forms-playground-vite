@@ -40,10 +40,11 @@ function Location(props: LocationProps) {
     const { venueTitle, altName, address, city, country, state, postal, parkingInfo, addNewLocationForm, ref } = props
 
     const {
-        register,
         control,
+        register,
         trigger,
         getValues,
+        watch,
         formState: { errors }
     } = useForm<LocationFormFieldValues>({
         defaultValues: {
@@ -58,6 +59,11 @@ function Location(props: LocationProps) {
         }
     })
 
+    // The most reliable method to get most recent results.
+    // Using getValues is not reliable between renders.
+    // https://react-hook-form.com/docs/useform/watch
+    const countryValue = watch('country')
+
     // Without this, we would not be able to access each Location's
     // unique trigger() function from the parent Home component
     useImperativeHandle(ref, () => ({
@@ -70,7 +76,7 @@ function Location(props: LocationProps) {
             <LocationMain>
                 <CopyButtonWrapper>
                     <ReusableButton
-                        icon={<IconCopy />}
+                        icon={<IconCopy fontSize={'.9rem'} />}
                         customPadding="6.5px"
                         onClick={() => addNewLocationForm(getValues())}
                     >
@@ -82,7 +88,7 @@ function Location(props: LocationProps) {
                     <TextInput
                         type="text"
                         id="venueTitle"
-                        {...register('venueTitle', { required: 'Venue Title is required.', minLength: 1 })}
+                        {...register('venueTitle', { required: 'Venue Title is required.' })}
                     ></TextInput>
                     {errors.venueTitle && errors.venueTitle.type === 'required' && (
                         <span role="alert">This is required</span>
@@ -132,6 +138,7 @@ function Location(props: LocationProps) {
                                         styles={DropdownStyling}
                                         value={StateOptions.find((option) => option.value === field.value)}
                                         onChange={(selectedOption) => field.onChange(selectedOption?.value)}
+                                        isDisabled={countryValue !== 'us'}
                                     />
                                 )}
                             />
